@@ -1,22 +1,38 @@
+/*
+TukTuk - Simple (but powerful) RWD Framework
+http://tuktuk.tapquo.com
+Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
+
+@namespace  Tuktuk
+@author     Javier Jimenez Villar <javi@tapquo.com> || @soyjavi
+*/
+
+
 (function() {
-  var __slice = [].slice;
+  var TukTuk,
+    __slice = [].slice;
 
-  if (window.TukTuk == null) {
-    window.TukTuk = {
-      dom: function() {
-        var args;
+  window.TukTuk = TukTuk = {};
 
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        if (typeof $$ !== "undefined" && $$ !== null) {
-          return $$.apply(null, args);
-        } else {
-          return $.apply(null, args);
-        }
-      }
-    };
-  }
+  TukTuk.VERSION = "0.7";
 
-  window.TukTuk.Box = (function(tk, undefined_) {
+  TukTuk.dom = function() {
+    var args;
+
+    args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+    if (typeof $$ !== "undefined" && $$ !== null) {
+      return $$.apply(null, args);
+    } else {
+      return $.apply(null, args);
+    }
+  };
+
+  TukTuk.ready = TukTuk.dom().ready;
+
+}).call(this);
+
+(function() {
+  TukTuk.Box = (function(tk) {
     var box, hide, lock, show;
 
     lock = void 0;
@@ -49,6 +65,51 @@
       hide: hide
     };
   })(TukTuk);
+
+}).call(this);
+
+(function() {
+  TukTuk.Events = (function(tk) {
+    return {
+      init: (function() {
+        return TukTuk.dom("[data-control=checkbox]").on("change", function(event) {
+          var checked, el, input;
+
+          event.preventDefault();
+          el = TukTuk.dom(this);
+          input = el.find("input");
+          checked = input[0].checked;
+          input.val(checked.toString());
+          el.removeClass("checked");
+          if (checked) {
+            return el.addClass("checked");
+          }
+        });
+      })()
+    };
+  })(TukTuk);
+
+}).call(this);
+
+(function() {
+  var hidebar;
+
+  hidebar = function() {
+    var browser, browserRegex, hideURLbar, isMobile;
+
+    browser = navigator.userAgent;
+    browserRegex = /(Android|BlackBerry|IEMobile|Nokia|iP(ad|hone|od)|Opera M(obi|ini))/;
+    isMobile = false;
+    if (browser.match(browserRegex)) {
+      hideURLbar = function() {
+        return window.scrollTo(0, 1);
+      };
+      isMobile = true;
+      return addEventListener("load", (function() {
+        return setTimeout(hideURLbar, 0);
+      }), false);
+    }
+  };
 
 }).call(this);
 
@@ -91,7 +152,9 @@
 
     hide = function() {
       lock.removeClass("active").attr("data-loading", "false");
-      modal.removeClass("active");
+      if (modal != null) {
+        modal.removeClass("active");
+      }
       return this;
     };
     /*
