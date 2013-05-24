@@ -141,9 +141,9 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
     */
 
     show = function(modal_id) {
+      lock.addClass("active").show();
       modal = tk.dom("[data-tuktuk=modal]#" + modal_id).first();
       modal.addClass("active");
-      lock.addClass("active");
       return this;
     };
     /*
@@ -155,6 +155,9 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
       if (modal != null) {
         modal.removeClass("active");
       }
+      setTimeout(function() {
+        return lock.hide();
+      }, 250);
       return this;
     };
     /*
@@ -177,7 +180,7 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
         tk.dom("[data-tuktuk-modal]").on("click", function() {
           return TukTuk.Modal.show(tk.dom(this).attr('data-tuktuk-modal'));
         });
-        tk.dom(document.body).append("<div data-tuktuk=\"lock\" data-loading=\"false\">\n  <div class=\"loading\">\n      <span class=\"top\"></span>\n      <span class=\"right\"></span>\n      <span class=\"bottom\"></span>\n      <span class=\"left\"></span>\n  </div>\n</div>");
+        tk.dom(document.body).append("<div data-tuktuk=\"lock\" data-loading=\"false\">\n  <div class=\"loading\">\n    <div class=\"container\">\n        <span class=\"top\"></span>\n        <span class=\"right\"></span>\n        <span class=\"bottom\"></span>\n        <span class=\"left\"></span>\n    </div>\n  </div>\n</div>");
         return lock = tk.dom("[data-tuktuk=lock]").first();
       })(),
       show: show,
