@@ -151,12 +151,12 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
     */
 
     hide = function() {
-      lock.removeClass("active").attr("data-loading", "false");
+      lock.removeClass("active");
       if (modal != null) {
         modal.removeClass("active");
       }
       setTimeout(function() {
-        return lock.hide();
+        return lock.attr("data-loading", "false").hide();
       }, 250);
       return this;
     };
