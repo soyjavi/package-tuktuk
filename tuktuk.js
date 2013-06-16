@@ -14,11 +14,10 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
 
   window.TukTuk = TukTuk = {};
 
-  TukTuk.VERSION = "0.7";
+  TukTuk.VERSION = "0.8";
 
   TukTuk.dom = function() {
     var args;
-
     args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
     if (typeof $$ !== "undefined" && $$ !== null) {
       return $$.apply(null, args);
@@ -34,7 +33,6 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
 (function() {
   TukTuk.Box = (function(tk) {
     var box, hide, lock, show;
-
     lock = void 0;
     box = void 0;
     show = function(box_id) {
@@ -50,7 +48,6 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
       _Instance: (function() {
         tk.dom("[data-tuktuk=boxes] aside.absolute").each(function(index, element) {
           var modal;
-
           modal = tk.dom(element);
           return modal.html("<div>" + modal.html() + "</div>");
         });
@@ -69,12 +66,42 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
 }).call(this);
 
 (function() {
+  window.TukTuk.Button = (function(tk) {
+    /*
+        @todo: Describe method
+    */
+
+    var loading;
+    loading = function(selector, value) {
+      var button;
+      if (value == null) {
+        value = true;
+      }
+      button = tk.dom(selector);
+      if (button.length > 0) {
+        if (value) {
+          button.attr("disabled", "disabled");
+          button.attr("data-loading", "true");
+          return button.prepend("<div class=\"loading\">\n  <div class=\"container\">\n      <span class=\"top\"></span>\n      <span class=\"right\"></span>\n      <span class=\"bottom\"></span>\n      <span class=\"left\"></span>\n  </div>\n</div> ");
+        } else {
+          button.removeAttr("disabled").removeAttr("data-loading");
+          return button.children(".loading").remove();
+        }
+      }
+    };
+    return {
+      loading: loading
+    };
+  })(TukTuk);
+
+}).call(this);
+
+(function() {
   TukTuk.Events = (function(tk) {
     return {
       init: (function() {
         return TukTuk.dom("[data-control=checkbox]").on("change", function(event) {
           var checked, el, input;
-
           event.preventDefault();
           el = TukTuk.dom(this);
           input = el.find("input");
@@ -96,7 +123,6 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
 
   hidebar = function() {
     var browser, browserRegex, hideURLbar, isMobile;
-
     browser = navigator.userAgent;
     browserRegex = /(Android|BlackBerry|IEMobile|Nokia|iP(ad|hone|od)|Opera M(obi|ini))/;
     isMobile = false;
@@ -114,26 +140,8 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
 }).call(this);
 
 (function() {
-  var __slice = [].slice;
-
-  if (!window.TukTuk) {
-    window.TukTuk = {
-      dom: function() {
-        var args;
-
-        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-        if (typeof $$ !== "undefined" && $$ !== null) {
-          return $$.apply(null, args);
-        } else {
-          return $.apply(null, args);
-        }
-      }
-    };
-  }
-
   window.TukTuk.Modal = (function(tk) {
     var hide, loading, lock, modal, show;
-
     lock = void 0;
     modal = void 0;
     /*
