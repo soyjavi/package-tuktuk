@@ -6,5 +6,5 @@
   "author": {
     "name": "Javi Jimenez",
     "site": "https://twitter.com/soyjavi"},
-  "license": [ {"type": "GPLv3"} ]
+  "license": [ {"type": "MIT"} ]
 }
