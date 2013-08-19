@@ -192,7 +192,13 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
         tk.dom("[data-tuktuk-modal]").on("click", function() {
           return TukTuk.Modal.show(tk.dom(this).attr('data-tuktuk-modal'));
         });
-        tk.dom(document.body).append("<div data-tuktuk=\"lock\" data-loading=\"false\">\n  <div class=\"loading\">\n    <div class=\"container\">\n        <span class=\"top\"></span>\n        <span class=\"right\"></span>\n        <span class=\"bottom\"></span>\n        <span class=\"left\"></span>\n    </div>\n  </div>\n</div>");
+        tk.dom(document.body).append("<div data-tuktuk=\"lock\" data-loading=\"false\">\n  <div class=\"loading\"></div>\n</div>");
+        tk.dom("[data-tuktuk=lock]").on("click", function(event) {
+          loading = lock.attr("data-loading");
+          if (!(event.target === modal || loading === "true")) {
+            return TukTuk.Modal.hide();
+          }
+        });
         return lock = tk.dom("[data-tuktuk=lock]").first();
       })(),
       show: show,
