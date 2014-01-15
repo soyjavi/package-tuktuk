@@ -31,6 +31,28 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
 }).call(this);
 
 (function() {
+  window.TukTuk.Accordion = (function(tk) {
+    return {
+      init: (function() {
+        return tk.dom("[data-tuktuk=accordion]").each(function(index, element) {
+          var accordion, activator;
+          accordion = tk.dom(element);
+          activator = accordion.find("[data-accordion=activator]").first();
+          return activator.on("click", function(event) {
+            if (accordion.hasClass("active")) {
+              return accordion.removeClass("active");
+            } else {
+              return accordion.addClass("active");
+            }
+          });
+        });
+      })()
+    };
+  })(TukTuk);
+
+}).call(this);
+
+(function() {
   TukTuk.Box = (function(tk) {
     var box, hide, lock, show;
     lock = void 0;
@@ -141,7 +163,7 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
 
 (function() {
   window.TukTuk.Modal = (function(tk) {
-    var hide, loading, lock, modal, show;
+    var alert, confirm, hide, loading, lock, modal, prompt, show;
     lock = void 0;
     modal = void 0;
     /*
@@ -168,6 +190,81 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
       }, 250);
       return this;
     };
+    alert = function(message) {
+      var text;
+      if (message == null) {
+        message = "";
+      }
+      modal = tk.dom("[data-tuktuk=modal][data-modal=alert]");
+      text = modal.find("#text");
+      text.html(message);
+      modal.find("button.success").on("click.Modal.alert", function() {
+        return hide();
+      });
+      lock.addClass("active").show();
+      this._hideAnyModal();
+      modal.addClass("active");
+      return this;
+    };
+    confirm = function(message, true_cb, false_cb) {
+      var accept_button, cancel_button, doCallback, text;
+      if (message == null) {
+        message = "";
+      }
+      modal = tk.dom("[data-tuktuk=modal][data-modal=confirm]");
+      text = modal.find("#text");
+      accept_button = modal.find("button.success");
+      cancel_button = modal.find("button.alert");
+      doCallback = function(callback) {
+        hide();
+        accept_button.unbind("click.Modal.confirm");
+        cancel_button.unbind("click.Modal.confirm");
+        if (callback) {
+          return setTimeout(callback, 250);
+        }
+      };
+      text.html(message);
+      accept_button.on("click.Modal.confirm", function() {
+        return doCallback(true_cb);
+      });
+      cancel_button.on("click.Modal.confirm", function() {
+        return doCallback(false_cb);
+      });
+      lock.addClass("active").show();
+      this._hideAnyModal();
+      modal.addClass("active");
+      return this;
+    };
+    prompt = function(message, callback) {
+      var accept_button, cancel_button, content, text;
+      if (message == null) {
+        message = "";
+      }
+      modal = tk.dom("[data-tuktuk=modal][data-modal=prompt]");
+      text = modal.find("#text");
+      content = modal.find("#content");
+      accept_button = modal.find("button.success");
+      cancel_button = modal.find("button.alert");
+      text.html(message);
+      accept_button.on("click.Modal.prompt", function() {
+        content = content.val();
+        hide();
+        accept_button.unbind("click.Modal.prompt");
+        if (callback) {
+          return setTimeout(function() {
+            return callback(content);
+          }, 250);
+        }
+      });
+      cancel_button.on("click.Modal.prompt", function() {
+        return hide();
+      });
+      content.val("");
+      lock.addClass("active").show();
+      this._hideAnyModal();
+      modal.addClass("active");
+      return this;
+    };
     /*
         @loading: Describe method
     */
@@ -182,6 +279,7 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
         return tk.dom("[data-tuktuk=modal]").removeClass("active");
       },
       _Instance: (function() {
+        var alert_template, confirm_template, loading_template, prompt_template;
         tk.dom("[data-tuktuk=modal].side").each(function(index, element) {
           modal = tk.dom(element);
           return modal.html("<div>" + modal.html() + "</div>");
@@ -192,18 +290,19 @@ Copyright (c) 2011-2013 Tapquo S.L. - Licensed GPLv3, Commercial
         tk.dom("[data-tuktuk-modal]").on("click", function() {
           return TukTuk.Modal.show(tk.dom(this).attr('data-tuktuk-modal'));
         });
-        tk.dom(document.body).append("<div data-tuktuk=\"lock\" data-loading=\"false\">\n  <div class=\"loading\"></div>\n</div>");
-        tk.dom("[data-tuktuk=lock]").on("click", function(event) {
-          loading = lock.attr("data-loading");
-          if (!(event.target === modal || loading === "true")) {
-            return TukTuk.Modal.hide();
-          }
-        });
+        loading_template = "<div data-tuktuk=\"lock\" data-loading=\"false\">\n  <div class=\"loading\"></div>\n</div>";
+        alert_template = "<div data-tuktuk=\"modal\" data-modal=\"alert\" class=\"column_5\">\n  <header class=\"bck alert\">\n    <h4 class=\"text thin inline\">Alert</h4>\n  </header>\n  <article id=\"text\" class=\"text big\"></article>\n  <footer>\n    <button class=\"button large success on-right margin-bottom\">\n      <span class=\"icon ok\"></span>\n    </button>\n  </footer>\n</div>";
+        prompt_template = "<div data-tuktuk=\"modal\" data-modal=\"prompt\" class=\"column_5\">\n  <header class=\"bck alert\">\n    <h4 class=\"text thin inline\">Alert</h4>\n  </header>\n  <article class=\"text big\">\n    <form>\n      <label for=\"content\" id=\"text\"/>\n      <input type=\"text\" id=\"content\"/>\n    </form>\n  </article>\n  <footer>\n    <button class=\"button large alert on-right margin-bottom\">\n      <span class=\"icon remove\"></span>\n    </button>\n    <button class=\"button large success on-right margin-bottom margin-right\">\n      <span class=\"icon ok\"></span>\n    </button>\n  </footer>\n</div>";
+        confirm_template = "<div data-tuktuk=\"modal\" data-modal=\"confirm\" class=\"column_5\">\n  <header class=\"bck alert\">\n    <h4 class=\"text thin inline\">Confirm</h4>\n  </header>\n  <article id=\"text\" class=\"text big\"></article>\n  <footer>\n    <button class=\"button large alert on-right margin-bottom\">\n      <span class=\"icon remove\"></span>\n    </button>\n    <button class=\"button large success on-right margin-bottom margin-right\">\n      <span class=\"icon ok\"></span>\n    </button>\n  </footer>\n</div>";
+        tk.dom(document.body).append("" + alert_template + "\n" + prompt_template + "\n" + confirm_template + "\n" + loading_template);
         return lock = tk.dom("[data-tuktuk=lock]").first();
       })(),
       show: show,
       hide: hide,
-      loading: loading
+      loading: loading,
+      alert: alert,
+      confirm: confirm,
+      prompt: prompt
     };
   })(TukTuk);
 
