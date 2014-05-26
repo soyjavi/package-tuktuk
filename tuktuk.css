@@ -81,13 +81,13 @@
 .flexbox > .order_8{-webkit-box-ordinal-group:8;-moz-box-ordinal-group:8;-ms-box-ordinal-group:8;-o-box-ordinal-group:8;box-ordinal-group:8}
 .flexbox > .order_9{-webkit-box-ordinal-group:9;-moz-box-ordinal-group:9;-ms-box-ordinal-group:9;-o-box-ordinal-group:9;box-ordinal-group:9}
 
-h1,h2,h3,h4,h5,h6{margin:0;padding:0}
-h1{font-size:2.6em}
-h2{font-size:2.2em}
-h3{font-size:1.8em}
-h4{font-size:1.6em}
-h5{font-size:1.3em}
-h6{font-size:1em}
+h1,h2,h3,h4,h5,h6{margin:0;padding:0;line-height:inherit}
+h1{font-size:2.6rem}
+h2{font-size:2.2rem}
+h3{font-size:1.8rem}
+h4{font-size:1.6rem}
+h5{font-size:1.3rem}
+h6{font-size:1rem}
 .text.thin{font-weight:200}
 .text.book{font-weight:300}
 .text.normal{font-weight:400}
@@ -258,7 +258,7 @@ body > section.landing h2{font-size:4em}
 body > section.landing h3{font-size:2.8em}
 body > section.landing .form.subscribe{margin-top:1em;}
 body > section.landing .form.subscribe *{float:left}
-body > section.landing .form.subscribe input{-webkit-box-flex:;-moz-box-flex:;-ms-box-flex:;-o-box-flex:;box-flex:;width:85%;border-right:0;margin-top:0;border:0}
+body > section.landing .form.subscribe input{-webkit-box-flex:1;-moz-box-flex:1;-ms-box-flex:1;-o-box-flex:1;box-flex:1;width:85%;border-right:0;margin-top:0;border:0}
 body > section.landing .form.subscribe .button,body > section.landing .form.subscribe button{width:15%;-webkit-box-shadow:none;-moz-box-shadow:none;-ms-box-shadow:none;-o-box-shadow:none;box-shadow:none}
 a{text-decoration:none;outline:0}
 
