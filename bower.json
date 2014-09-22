@@ -1,0 +1,14 @@
+{
+  "name": "tuktuk",
+  "version": "1.0.1",
+  "description": "Simple (but powerful) RWD Framework",
+  "main": "tuktuk.css",
+  "homepage": "https://github.com/soyjavi/tuktuk",
+  "license": "MIT",
+  "authors": [
+    "Javi Jimenez", "Javi Jimenez <javi@tapquo.com>"],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/soyjavi/tuktuk.git"
+  }
+}
